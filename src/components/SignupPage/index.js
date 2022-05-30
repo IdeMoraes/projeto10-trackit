@@ -5,13 +5,15 @@ import styled from "styled-components";
 import logomark from "../../assets/logomark.png";
 
 export default function SignupPage() {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [image, setImage] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState("");
 
   function signupRequest() {
+    setIsLoading("loading");
     const signupData = {
       email: email,
       name: name,
@@ -23,9 +25,11 @@ export default function SignupPage() {
       signupData
     );
     request.then((success) => {
-      navigate("/")
+      setIsLoading("");
+      navigate("/");
     });
     request.catch((problem) => {
+      setIsLoading("");
       alert(`Ocorreu uma falha no cadastro. ${problem.response.data.message}`);
     });
   }
@@ -34,26 +38,32 @@ export default function SignupPage() {
       <LogomarkImage src={logomark} alt="logomark" />
       <Logotype>TrackIt</Logotype>
       <Input
+        className={isLoading}
         type="email"
         placeholder="email"
         onChange={(event) => setEmail(event.target.value)}
       />
       <Input
+        className={isLoading}
         type="password"
         placeholder="senha"
         onChange={(event) => setPassword(event.target.value)}
       />
       <Input
+        className={isLoading}
         type="text"
         placeholder="nome"
         onChange={(event) => setName(event.target.value)}
       />
       <Input
+        className={isLoading}
         type="url"
         placeholder="foto"
         onChange={(event) => setImage(event.target.value)}
       />
-      <Button onClick={() => signupRequest()}>Cadastrar</Button>
+      <Button className={isLoading} onClick={() => signupRequest()}>
+        Cadastrar
+      </Button>
       <StyledLink to="/">Já tem uma conta? Faça login!</StyledLink>
     </SingupPageContainer>
   );
@@ -82,6 +92,10 @@ const Input = styled.input`
   font-size: 19.976px;
   padding-left: 11px;
   margin-bottom: 6px;
+  &.loading {
+    background-color: #f2f2f2;
+    color: #afafaf;
+  }
 `;
 const Button = styled.button`
   background: #52b6ff;
@@ -92,6 +106,9 @@ const Button = styled.button`
   font-size: 20.976px;
   color: white;
   margin-bottom: 25px;
+  &.loading {
+    opacity: 0.7;
+  }
 `;
 const StyledLink = styled(Link)`
   font-family: "Lexend Deca", sans-serif;

@@ -6,14 +6,20 @@ import UserContext from "../../contexts/UserContext";
 import logomark from "../../assets/logomark.png";
 
 export default function LoginPage() {
-  const { setUserId, setUserName, setUserImage, setUserEmail, setUserPassword, setUserToken } = useContext(UserContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    setUserId,
+    setUserName,
+    setUserImage,
+    setUserEmail,
+    setUserPassword,
+    setUserToken
+  } = useContext(UserContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState('');
-
+  const [isLoading, setIsLoading] = useState("");
   function loginRequest() {
-    setIsLoading('loading');
+    setIsLoading("loading");
     const loginData = {
       email: email,
       password: password
@@ -29,10 +35,11 @@ export default function LoginPage() {
       setUserEmail(answer.data.email);
       setUserPassword(answer.data.password);
       setUserToken(answer.data.token);
-      setIsLoading('');
-      navigate("/hoje")
+      setIsLoading("");
+      navigate("/hoje");
     });
     request.catch((problem) => {
+      setIsLoading("");
       alert(`Ocorreu uma falha no login. ${problem.response.data.message}`);
     });
   }
@@ -41,18 +48,20 @@ export default function LoginPage() {
       <LogomarkImage src={logomark} alt="logomark" />
       <Logotype>TrackIt</Logotype>
       <Input
-      className={isLoading}
+        className={isLoading}
         type="email"
         placeholder="email"
         onChange={(event) => setEmail(event.target.value)}
       />
       <Input
-      className={isLoading}
+        className={isLoading}
         type="password"
         placeholder="senha"
         onChange={(event) => setPassword(event.target.value)}
       />
-      <Button className={isLoading} onClick={() => loginRequest()}>Entrar</Button>
+      <Button className={isLoading} onClick={() => loginRequest()}>
+        Entrar
+      </Button>
       <StyledLink to="/cadastro">Não tem uma conta? Cadastre-se!</StyledLink>
     </LoginPageContainer>
   );
@@ -81,9 +90,9 @@ const Input = styled.input`
   font-size: 19.976px;
   padding-left: 11px;
   margin-bottom: 6px;
-  &.loading{
-    background-color: #F2F2F2;
-    color: #AFAFAF;
+  &.loading {
+    background-color: #f2f2f2;
+    color: #afafaf;
   }
 `;
 const Button = styled.button`
@@ -95,7 +104,7 @@ const Button = styled.button`
   font-size: 20.976px;
   color: white;
   margin-bottom: 25px;
-  &.loading{
+  &.loading {
     opacity: 0.7;
   }
 `;
