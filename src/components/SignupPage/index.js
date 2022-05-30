@@ -11,9 +11,11 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   function signupRequest() {
     setIsLoading("loading");
+    setDisabled(true);
     const signupData = {
       email: email,
       name: name,
@@ -26,10 +28,12 @@ export default function SignupPage() {
     );
     request.then((success) => {
       setIsLoading("");
+      setDisabled(false);
       navigate("/");
     });
     request.catch((problem) => {
       setIsLoading("");
+      setDisabled(false);
       alert(`Ocorreu uma falha no cadastro. ${problem.response.data.message}`);
     });
   }
@@ -39,29 +43,33 @@ export default function SignupPage() {
       <Logotype>TrackIt</Logotype>
       <Input
         className={isLoading}
+        disabled={disabled}
         type="email"
         placeholder="email"
         onChange={(event) => setEmail(event.target.value)}
       />
       <Input
         className={isLoading}
+        disabled={disabled}
         type="password"
         placeholder="senha"
         onChange={(event) => setPassword(event.target.value)}
       />
       <Input
         className={isLoading}
+        disabled={disabled}
         type="text"
         placeholder="nome"
         onChange={(event) => setName(event.target.value)}
       />
       <Input
         className={isLoading}
+        disabled={disabled}
         type="url"
         placeholder="foto"
         onChange={(event) => setImage(event.target.value)}
       />
-      <Button className={isLoading} onClick={() => signupRequest()}>
+      <Button className={isLoading} disabled={disabled} onClick={() => signupRequest()}>
         Cadastrar
       </Button>
       <StyledLink to="/">Já tem uma conta? Faça login!</StyledLink>

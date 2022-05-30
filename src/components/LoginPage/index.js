@@ -18,8 +18,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState("");
+  const [disabled,setDisabled] = useState(false);
+
   function loginRequest() {
     setIsLoading("loading");
+    setDisabled(true);
     const loginData = {
       email: email,
       password: password
@@ -36,10 +39,12 @@ export default function LoginPage() {
       setUserPassword(answer.data.password);
       setUserToken(answer.data.token);
       setIsLoading("");
+      setDisabled(false);
       navigate("/hoje");
     });
     request.catch((problem) => {
       setIsLoading("");
+      setDisabled(false);
       alert(`Ocorreu uma falha no login. ${problem.response.data.message}`);
     });
   }
@@ -49,17 +54,19 @@ export default function LoginPage() {
       <Logotype>TrackIt</Logotype>
       <Input
         className={isLoading}
+        disabled={disabled}
         type="email"
         placeholder="email"
         onChange={(event) => setEmail(event.target.value)}
       />
       <Input
         className={isLoading}
+        disabled={disabled}
         type="password"
         placeholder="senha"
         onChange={(event) => setPassword(event.target.value)}
       />
-      <Button className={isLoading} onClick={() => loginRequest()}>
+      <Button className={isLoading} disabled={disabled} onClick={() => loginRequest()}>
         Entrar
       </Button>
       <StyledLink to="/cadastro">Não tem uma conta? Cadastre-se!</StyledLink>

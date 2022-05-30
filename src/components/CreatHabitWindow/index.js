@@ -16,6 +16,7 @@ export default function CreateHabitWindow(props){
     const { userToken } = useContext(UserContext);
     const [name, setName]=useState("");
     const [days, setDays] =useState([]);
+    const [disabled, setDisabled] = useState(false);
     const body = {
       name: name,
       days: days
@@ -26,6 +27,7 @@ export default function CreateHabitWindow(props){
       }
     }
     function saveNewHabit(){
+        setDisabled(true);
       const config = {
         headers: {
           Authorization: `Bearer ${userToken}`
@@ -38,24 +40,25 @@ export default function CreateHabitWindow(props){
           const requisicao = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
           requisicao.then(answer => {
               props.setHabitsList(answer.data);});
+            setDisabled(false);
     });
-      request.catch((problem)=>{console.log(problem); alert('Houve um problema e esse hábito não foi criado. Tente novamente.')});
+      request.catch((problem)=>{console.log(problem); alert('Houve um problema e esse hábito não foi criado. Tente novamente.');setDisabled(false)});
     }
     return(
       <CreateHabit>
-        <HabitName placeholder="nome do hábito" onChange={(event)=>setName(event.target.value)}/>
+        <HabitName disabled={disabled} placeholder="nome do hábito" onChange={(event)=>setName(event.target.value)}/>
         <WeekDays>
-          <WeekDay onClick={()=>{chooseDay(1);setIsDay1Selected('newHabitDaySelected')}} className={isDay1Selected}>S</WeekDay>
-          <WeekDay onClick={()=>{chooseDay(2);setIsDay2Selected('newHabitDaySelected')}} className={isDay2Selected}>T</WeekDay>
-          <WeekDay onClick={()=>{chooseDay(3);setIsDay3Selected('newHabitDaySelected')}} className={isDay3Selected}>Q</WeekDay>
-          <WeekDay onClick={()=>{chooseDay(4);setIsDay4Selected('newHabitDaySelected')}} className={isDay4Selected}>Q</WeekDay>
-          <WeekDay onClick={()=>{chooseDay(5);setIsDay5Selected('newHabitDaySelected')}} className={isDay5Selected}>S</WeekDay>
-          <WeekDay onClick={()=>{chooseDay(6);setIsDay6Selected('newHabitDaySelected')}} className={isDay6Selected}>S</WeekDay>
-          <WeekDay onClick={()=>{chooseDay(7);setIsDay7Selected('newHabitDaySelected')}} className={isDay7Selected}>D</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(1);setIsDay1Selected('newHabitDaySelected')}} className={isDay1Selected}>S</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(2);setIsDay2Selected('newHabitDaySelected')}} className={isDay2Selected}>T</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(3);setIsDay3Selected('newHabitDaySelected')}} className={isDay3Selected}>Q</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(4);setIsDay4Selected('newHabitDaySelected')}} className={isDay4Selected}>Q</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(5);setIsDay5Selected('newHabitDaySelected')}} className={isDay5Selected}>S</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(6);setIsDay6Selected('newHabitDaySelected')}} className={isDay6Selected}>S</WeekDay>
+          <WeekDay disabled={disabled} onClick={()=>{chooseDay(7);setIsDay7Selected('newHabitDaySelected')}} className={isDay7Selected}>D</WeekDay>
         </WeekDays>
         <Buttons>
-          <CancelButton onClick={()=>props.setCreatingNewHabit(false)}>Cancelar</CancelButton>
-          <SaveButton onClick={()=>saveNewHabit()}>Salvar</SaveButton>
+          <CancelButton disabled={disabled} onClick={()=>props.setCreatingNewHabit(false)}>Cancelar</CancelButton>
+          <SaveButton disabled={disabled} onClick={()=>saveNewHabit()}>Salvar</SaveButton>
         </Buttons>
       </CreateHabit>
     );
