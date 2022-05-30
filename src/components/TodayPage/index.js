@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContext";
+import ProgressContext from "../../contexts/ProgressContext";
 import Header from "../Header";
 import NavigationBar from "../NavigationBar";
 import "dayjs/locale/pt-br";
@@ -10,6 +11,7 @@ export default function TodayPage() {
   const dayjs = require("dayjs");
   const dataDeHoje = dayjs().locale("pt-br").format("dddd, DD/MM");
   const { userToken } = useContext(UserContext);
+  const {porcentagem, setPorcentagem} = useContext(ProgressContext);
   const [habitosDeHoje, setHabitosDeHoje] = useState([]);
   let doneOrNotList = habitosDeHoje.map((habito) => {
     return String(habito.done);
@@ -18,7 +20,7 @@ export default function TodayPage() {
     return item === "true";
   });
   let doneNumberList = doneList.length;
-  let porcentagem = ((doneNumberList / habitosDeHoje.length) * 100).toFixed(0);
+  setPorcentagem(((doneNumberList / habitosDeHoje.length) * 100).toFixed(0));
   const config = {
     headers: {
       Authorization: `Bearer ${userToken}`
